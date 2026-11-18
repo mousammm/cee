@@ -1,6 +1,7 @@
 CC=cc
 
 CFLAGS := -std=c89
+CFLAGS += -ggdb
 # CFLAGS += -Wall -Wextra -Wpedantic -Werror
 
 EXE = cee

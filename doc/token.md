@@ -58,6 +58,16 @@ Literals represent raw, fixed values written directly into the source code. C89 
 | **Character Constants** | A single character or escape sequence enclosed in single quotes. | `'A'`, `'\n'`, `'\0'` |
 | **String Literals** | A sequence of characters enclosed in double quotes (implicitly null-terminated). | `"Hello, world!\n"` |
 
+**INTEGER Constants**
+
+```
+123:         = int, long int, unsigned long int.
+012 or 0xfff = int, unsigned int, long int, unsigned long int.
+123u/U       = unsigned int, unsigned long int.
+124l/L       = long int, unsigned long int.
+123UL        = unsigned long.
+```
+
 ---
 
 ## 4. Operators (Math, Logic, and Memory)
@@ -86,3 +96,4 @@ Punctuators organize code into blocks, parameter lists, and statements so the pa
   * `,` — Argument and declaration list separator
   * `:` — Label and `switch`/`case` delimiter
   * `...` — Ellipsis for variadic functions (e.g., `int printf(const char *fmt, ...)`)
+
