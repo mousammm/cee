@@ -4,8 +4,8 @@
  * [x] skip c89 comments
  * [x] identifier vs keyword
  * [ ] literals and constant
- * [x] operators (not all)
- * [x] puncuators (...)
+ * [x] operators
+ * [x] puncuators
  */
 #include <stdio.h>
 #include <string.h>
@@ -54,7 +54,7 @@ int is_keyword(const char *word) {
     return 0; /* It is a regular identifier */
 }
 int is_punc(char c) {
-    /* (){}[];,: ... */
+    /* (){}[];,: */
     int i;
     char *punc = "(){}[];,:";
     for (i = 0; punc[i] != '\0'; i++) {
@@ -80,7 +80,7 @@ int is_operator(char c) {
 int main(int argc, char **argv)
 {
     int i;
-#if 1
+#if 0
     char *src;
     FILE *f = fopen(argv[1], "r");
     fseek(f, 0, SEEK_END);
@@ -91,13 +91,16 @@ int main(int argc, char **argv)
     src[bytes_read] = '\0';
 #else
     char *src = 
+        "#include <stdio.h>\n"
+        "/* Main entry point */\n"
         "int main() {\n"
-        "    /*this is a comment\n"
-        "     * multi line commetn\n"
-        "     */ \n"
-        "    int hello = 0;\n"
+        "    int count = 10;\n"
+        "    char grade = 'A';\n"
+        "    if (count >= 5 && count != 0) {\n"
+        "        printf(\"Hello, World!\");\n"
+        "    }\n"
         "    return 0;\n"
-        "}\0";
+        "}\n";
     int src_len = strlen(src);
 #endif
 
@@ -114,8 +117,6 @@ int main(int argc, char **argv)
                 printf("WSP: TABS\n");
             } else if (src[i] == '\r') {
                 printf("WSP: CARRIGE_RET\n");
-            } else {
-                printf("WSP: UNKNOWN\n");
             }
 #endif
             continue;
@@ -168,10 +169,24 @@ int main(int argc, char **argv)
             }
         } 
 
-        else if (is_operator(src[i])) {
-            /* operator in c 3, 2, 1 */
-            char op[4] = {0}; /* +1 for null byte */
+        /* constants and literals */
+        else if (src[i] == '"') {
+            printf("STRING: \t\"");
+                         
+            i++; /* move past the opening quote */
+            while (src[i] != '"' && src[i] != '\0') {
+                /* handle escaped char */
+                putc(src[i], stdout);
+                i++;
+            }
+            putc(src[i], stdout);
+            putc('\n', stdout);
+            i++;
+        }
 
+        else if (is_operator(src[i])) {
+            char op[4] = {0};
+            /* operator in c 3, 2, 1 */
             /* check 3char operator */
             if ((src[i] == '<' && src[i] == '<' && src[i] == '=') ||
                 (src[i] == '>' && src[i] == '>' && src[i] == '=') ||
@@ -207,7 +222,7 @@ int main(int argc, char **argv)
         }
 
         else {
-            printf("---------: \t%c\n", src[i]);
+            printf("UNKNOWN: \t%c\n", src[i]);
         }
 
     }
